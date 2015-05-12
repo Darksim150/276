@@ -21,14 +21,22 @@ Entity* InitEnt(Entity *ent, int x, int y, int vy, int onGround, char* imagel, c
 	ent->hurtbox.y = 0;
 	ent->hurtbox.w = 320;
 	ent->hurtbox.h = 240;
+	ent->hitboxR.x = 160;
+	ent->hitboxR.y = 110;
+	ent->hitboxR.w = 160;
+	ent->hitboxR.h = 20;
+	ent->hitboxL.x = 160;
+	ent->hitboxL.y = 110;
+	ent->hitboxL.w = -160;
+	ent->hitboxL.h = 20;
 	return ent;
 }
 void Move(Entity* ent)
 {
 	if(ent->flag == WALK)
-		ent->x = ent->x + 10;
+		ent->x = ent->x + 15;
 	if(ent->flag == WALKL)
-		ent->x = ent->x - 10;
+		ent->x = ent->x - 15;
 
 	if(ent->flag == JUMP){
 
@@ -45,6 +53,13 @@ void Move(Entity* ent)
 	}
 	else if(ent->y < 500)
 		ent->onGround = 0;
+
+	if(ent->x > 850){
+		ent->x = 850;
+	}
+	if(ent->x < -174){
+		ent->x = -174;
+	}
 }
 void FreeEnt(Entity* ent)
 {
@@ -82,6 +97,10 @@ void Pull(Uint8* keys, Entity* ent)
 		}
 		
 	}
+	if(keys[SDLK_g])
+	{
+		ent->flag = KICK;
+	}
 	}
 
 	if(ent == player2){
@@ -100,13 +119,17 @@ void Pull(Uint8* keys, Entity* ent)
 		ent->flag = IDLE;
 	}
 
-	if(keys[SDLK_RCTRL])
+	if(keys[SDLK_SLASH])
 	{
 		if(ent->onGround == 1)
 		{
 			ent->flag = JUMP;
 		}
 		
+	}
+	if(keys[SDLK_PERIOD])
+	{
+		ent->flag = KICK;
 	}
 	}
 
@@ -116,6 +139,12 @@ void Pull(Uint8* keys, Entity* ent)
 }
 void Draw(SDL_Surface* screen, Entity* ent)
 {
+	if(ent->flag == KICK)
+	{
+		DrawSprite(ent->spr, screen, ent->x, ent->y, ent->frame+46);
+		ent->frame = (ent->frame + 1)%7;
+		return;
+	}
 	if(ent->onGround == 0)
 	{
 		DrawSprite(ent->spr, screen, ent->x, ent->y, ent->frame+62);
@@ -141,5 +170,6 @@ void Draw(SDL_Surface* screen, Entity* ent)
 		DrawSprite(ent->spr, screen, ent->x, ent->y, ent->frame);
 		ent->frame = (ent->frame + 1)%5;
 	}
+	
 
 }

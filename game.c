@@ -28,8 +28,8 @@ int main(int argc, char *argv[])
   SDL_FreeSurface(temp);
   if(bg != NULL)
     SDL_BlitSurface(bg,NULL,buffer,NULL);
-  player1 = InitEnt(player1, 200, 310, 0, 0, "images/joojoo_no_color.png", "images/reversed.png", 360, 240,);
-  player2 = InitEnt(player2, 500, 310, 0, 0, "images/joojoo_no_color.png", "images/reversed.png", 360, 240,);
+  player1 = InitEnt(player1, 200, 310, 0, 0, "images/joojookick.png", "images/joojookickreverse.png", 360, 240);
+  player2 = InitEnt(player2, 500, 310, 0, 0, "images/joojookick.png", "images/joojookickreverse.png", 360, 240);
   done = 0;
   player2->spr = player2->sprr;
   do

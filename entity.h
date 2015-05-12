@@ -8,6 +8,7 @@
 #define WALK	1
 #define	JUMP	2
 #define WALKL	4
+#define KICK	8
 
 typedef struct Entity_T
 {
@@ -22,7 +23,8 @@ typedef struct Entity_T
 	long flag;
 	int frame;
 	SDL_Rect hurtbox;
-	SDL_Rect hitbox;
+	SDL_Rect hitboxR;
+	SDL_Rect hitboxL;
 }Entity;
 
 Entity* InitEnt(Entity *ent, int x, int y, int vy, int onGround, char* imagel, char* imager, int xframe, int yframe);

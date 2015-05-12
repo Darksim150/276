@@ -7,7 +7,8 @@
 extern SDL_Surface *screen;
 extern SDL_Surface *buffer; /*pointer to the draw buffer*/
 extern SDL_Rect Camera;
-extern Entity* player;
+extern Entity* player1;
+extern Entity* player2;
 
 void Init_All();
 
@@ -27,19 +28,23 @@ int main(int argc, char *argv[])
   SDL_FreeSurface(temp);
   if(bg != NULL)
     SDL_BlitSurface(bg,NULL,buffer,NULL);
-  player = InitEnt(player, 410, 310, 0, 0, "images/joojoo_no_color.png",360,240);
+  player1 = InitEnt(player1, 200, 310, 0, 0, "images/joojoo_no_color.png", "images/reversed.png", 360, 240,);
+  player2 = InitEnt(player2, 500, 310, 0, 0, "images/joojoo_no_color.png", "images/reversed.png", 360, 240,);
   done = 0;
+  player2->spr = player2->sprr;
   do
   {
     ResetBuffer ();
     SDL_PumpEvents();
     keys = SDL_GetKeyState(&keyn);	
-	Pull(keys, player);
-	Draw(screen, player);
+	Pull(keys, player1);
+	Pull(keys, player2);
+	Draw(screen, player1);
+	Draw(screen, player2);
     NextFrame();
     if(keys[SDLK_ESCAPE] || keys[SDL_QUIT])done = 1;
   }while(!done);
-  FreeEnt(player);
+  FreeEnt(player1);
   exit(0);		/*technically this will end the program, but the compiler likes all functions that can return a value TO return a value*/
   return 0;
 }

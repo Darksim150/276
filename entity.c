@@ -1,19 +1,26 @@
 #include "entity.h"
 
 Entity EntityList[1000];
-Entity* player;
+Entity* player1;
+Entity* player2;
 
-Entity* InitEnt(Entity *ent, int x, int y, int vy, int onGround, char* image, int xframe, int yframe)
+Entity* InitEnt(Entity *ent, int x, int y, int vy, int onGround, char* imagel, char* imager, int xframe, int yframe)
 {
 	ent = (Entity*)malloc(sizeof(Entity));
 	ent->x = x;
 	ent->y = y;
 	ent->vy = vy;
 	ent->flag = IDLE;
-	ent->spr = LoadSprite(image, xframe, yframe);
+	ent->sprl = LoadSprite(imagel, xframe, yframe);
+	ent->sprr = LoadSprite(imager, xframe, yframe);
+	ent->spr = ent->sprl;
 	ent->frame = 0;
 	ent->used = 1;
 	ent->onGround = 0;
+	ent->hurtbox.x = 0;
+	ent->hurtbox.y = 0;
+	ent->hurtbox.w = 320;
+	ent->hurtbox.h = 240;
 	return ent;
 }
 void Move(Entity* ent)
@@ -51,12 +58,15 @@ void FreeEnt(Entity* ent)
 
 void Pull(Uint8* keys, Entity* ent)
 {
-	if(keys[SDLK_RIGHT])
+	if(ent == player1){
+	if(keys[SDLK_d])
 	{
+		ent->spr = ent->sprl;
 		ent->flag = WALK;
 	}
-	else if(keys[SDLK_LEFT])
+	else if(keys[SDLK_a])
 	{
+		ent->spr = ent->sprr;
 		ent->flag = WALKL;
 	}
 	
@@ -64,7 +74,7 @@ void Pull(Uint8* keys, Entity* ent)
 		ent->flag = IDLE;
 	}
 
-	if(keys[SDLK_SPACE])
+	if(keys[SDLK_f])
 	{
 		if(ent->onGround == 1)
 		{
@@ -72,8 +82,36 @@ void Pull(Uint8* keys, Entity* ent)
 		}
 		
 	}
+	}
+
+	if(ent == player2){
+	if(keys[SDLK_RIGHT])
+	{
+		ent->flag = WALK;
+		ent->spr = ent->sprl;
+	}
+	else if(keys[SDLK_LEFT])
+	{
+		ent->flag = WALKL;
+		ent->spr = ent->sprr;
+	}
+	
+	else {
+		ent->flag = IDLE;
+	}
+
+	if(keys[SDLK_RCTRL])
+	{
+		if(ent->onGround == 1)
+		{
+			ent->flag = JUMP;
+		}
+		
+	}
+	}
 
 	Move(ent);
+	
 
 }
 void Draw(SDL_Surface* screen, Entity* ent)
@@ -90,7 +128,7 @@ void Draw(SDL_Surface* screen, Entity* ent)
 	}
 	else if(ent->flag == WALKL)
 	{
-		DrawSprite(ent->spr, screen, ent->x, ent->y, ent->frame+44);
+		DrawSprite(ent->spr, screen, ent->x, ent->y, ent->frame+29);
 		ent->frame = (ent->frame + 1)%12;
 	}
 	else if(ent->flag == JUMP)
